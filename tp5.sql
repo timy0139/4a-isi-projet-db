@@ -19,3 +19,16 @@ CREATE TABLE IF NOT EXISTS orders (
     created_at  TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS order_lines (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id   INTEGER NOT NULL,
+    product_id INTEGER,                                 -- NULL si la ligne est un menu
+    menu_id    INTEGER,                                 -- NULL si la ligne est un produit
+    quantity   INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    FOREIGN KEY (order_id)   REFERENCES orders(id)   ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (menu_id)    REFERENCES menus(id),
+    -- exactement un des deux doit être renseigné
+    CHECK ((product_id IS NOT NULL) + (menu_id IS NOT NULL) = 1)
+);
