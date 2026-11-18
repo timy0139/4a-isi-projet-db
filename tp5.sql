@@ -1,4 +1,4 @@
-PRAGMA foreign_keys = ON;   -- SQLite ignore les clés étrangères sans ça
+PRAGMA foreign_keys = ON;  
 
 CREATE TABLE IF NOT EXISTS users (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS order_lines (
     FOREIGN KEY (order_id)   REFERENCES orders(id)   ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (menu_id)    REFERENCES menus(id),
-    -- exactement un des deux doit être renseigné
+
     CHECK ((product_id IS NOT NULL) + (menu_id IS NOT NULL) = 1)
 );
 
@@ -42,3 +42,14 @@ CREATE TABLE IF NOT EXISTS products (
     stock        INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
     is_available INTEGER NOT NULL DEFAULT 1 CHECK (is_available IN (0, 1))
 );
+
+CREATE TABLE IF NOT EXISTS menus (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    name           TEXT NOT NULL,
+    description    TEXT,
+    price          REAL NOT NULL CHECK (price >= 0),
+    available_from TEXT NOT NULL,                  -- 'YYYY-MM-DD'
+    available_to   TEXT NOT NULL,                  -- 'YYYY-MM-DD'
+    CHECK (available_to >= available_from)
+);
+
