@@ -53,3 +53,10 @@ CREATE TABLE IF NOT EXISTS menus (
     CHECK (available_to >= available_from)
 );
 
+CREATE TABLE IF NOT EXISTS menu_products (
+    menu_id    INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    PRIMARY KEY (menu_id, product_id),
+    FOREIGN KEY (menu_id)    REFERENCES menus(id)    ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
