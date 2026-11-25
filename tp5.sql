@@ -1,6 +1,6 @@
 PRAGMA foreign_keys = ON;  
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT    NOT NULL UNIQUE,
     password TEXT    NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     is_blocked INTEGER NOT NULL DEFAULT 0 CHECK (is_blocked IN (0, 1))
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS product (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name         TEXT    NOT NULL,
     description  TEXT,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS products (
     is_available INTEGER NOT NULL DEFAULT 1 CHECK (is_available IN (0, 1))
 );
 
-CREATE TABLE IF NOT EXISTS menus (
+CREATE TABLE IF NOT EXISTS menu (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
     name   TEXT NOT NULL,
     description TEXT,
@@ -28,17 +28,17 @@ CREATE TABLE IF NOT EXISTS menus (
 );
 
 
-CREATE TABLE IF NOT EXISTS orders (
+CREATE TABLE IF NOT EXISTS `order` (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id     INTEGER NOT NULL,
     pickup_date TEXT    NOT NULL,                       -- format 'YYYY-MM-DD'
     status  TEXT    NOT NULL DEFAULT 'en_attente'
                 CHECK (status IN ('en_attente', 'prete', 'recuperee', 'non_honoree')),
-    created_at TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    create_at TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS order_lines (
+CREATE TABLE IF NOT EXISTS order_line (
     id  INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id INTEGER NOT NULL,
     product_id INTEGER,                                 -- NULL si la ligne est un menu
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS order_lines (
 
 
 
-CREATE TABLE IF NOT EXISTS menu_products (
+CREATE TABLE IF NOT EXISTS menu_product (
     menu_id    INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     PRIMARY KEY (menu_id, product_id),
