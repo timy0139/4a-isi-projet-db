@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `order` (
     status  TEXT    NOT NULL DEFAULT 'en_attente'
                 CHECK (status IN ('en_attente', 'prete', 'recuperee', 'non_honoree')),
     create_at TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 CREATE TABLE IF NOT EXISTS order_line (
@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS order_line (
     product_id INTEGER,                                 -- NULL si la ligne est un menu
     menu_id    INTEGER,                                 -- NULL si la ligne est un produit
     quantity   INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
-    FOREIGN KEY (order_id)   REFERENCES orders(id)   ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (menu_id)    REFERENCES menus(id),
+    FOREIGN KEY (order_id)   REFERENCES `order`(id)   ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES product(id),
+    FOREIGN KEY (menu_id)    REFERENCES menu(id),
 
     CHECK ((product_id IS NOT NULL) + (menu_id IS NOT NULL) = 1)
 );
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS menu_product (
     menu_id    INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     PRIMARY KEY (menu_id, product_id),
-    FOREIGN KEY (menu_id)    REFERENCES menus(id)    ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+    FOREIGN KEY (menu_id)    REFERENCES menu(id)    ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS closure_day (
